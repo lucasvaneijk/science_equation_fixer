@@ -98,13 +98,13 @@ document.getElementById("send").addEventListener("click", () => {
   matrix = gaussianElimination(matrix)
   let result = solve(matrix)
   if (result.includes(NaN) || result.includes(0)) {
-    document.getElementById("resultaat").innerText = "deze vergelijking werkt niet!"
+    document.getElementById("resultaat").innerText = "this equation is not possible"
   }
   else {
     result = scaleToIntegers(result)
   }
   if (result.includes(NaN) || result.includes(0)) {
-    document.getElementById("resultaat").innerText = "deze vergelijking werkt niet!"
+    document.getElementById("resultaat").innerText = "this equation is not possible"
   }
   else {
     document.getElementById("resultaat").innerText = formatResults(result, vals)

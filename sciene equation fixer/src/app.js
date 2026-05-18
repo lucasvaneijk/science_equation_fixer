@@ -1,4 +1,4 @@
-console.log("works");
+﻿console.log("works");
 const elementsList = ["H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge", "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg", "Pb", "Bi", "Po", "At", "Rn", "Fr", "Ra", "Ac", "Th", "Pa", "U", "Np", "Pu", "Am", "Cm", "Bk", "Cf", "Es", "Fm", "Md", "No", "Lr", "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Ds", "Rg", "Cn", "Nh", "Fl", "Mc", "Lv", "Ts", "Og"]
 const elementsListOneCaracter = ["H", "B", "C", "N", "O", "F", "P", "S", "K", "V", "Y", "I", "U", "W"]
 document.getElementById("send").addEventListener("click", () => {
@@ -14,7 +14,7 @@ document.getElementById("send").addEventListener("click", () => {
     val6: document.getElementById("outputThree").value,
   }
 
-  console.log(elements, vals)
+
 
   function listelements (val, state) {
     let n = 0;
@@ -63,7 +63,7 @@ document.getElementById("send").addEventListener("click", () => {
           n += 2; continue;
         }    
           } 
-          else {return `${val[n]}${val[n + 1]} is not an element1`};
+          else {return `${val[n]}${val[n + 1]} is not an element`, NaN};
         };
     
         if (elementsListOneCaracter.includes(val[n])) {   
@@ -77,104 +77,77 @@ document.getElementById("send").addEventListener("click", () => {
           }
           else {elements[state][val[n]] = 1; n += 1; continue;}          
         }
-        else {return `${val[n]} is not an element2`;};
+        else {return `${val[n]} is not an element`, NaN};
           }
         
     }              
+    return elements[state]
   }
 
-  let errors = []
-  console.log("1")
+  let molecules = [];
+  let leftcount = 0;
   for (let i = 1; i < 7; i++) {
     let tempval = "val" + i;
-    let e = listelements(vals[tempval], checkNumber(i));
-    if (e) {
-        document.getElementById("resultaat").innerText = e;
-        break;
-    }
-    e = listelements(vals[tempval], tempval);
-    if (e) {
-        document.getElementById("resultaat").innerText = e;
-        break;
+    if (vals[tempval] !== "") {
+      if (i <= 3) {leftcount++;}
+      molecules.push(listelements(vals[tempval], tempval));
     }
   }
-  document.getElementById("resultaat").innerText = JSON.stringify(elements);
-  console.log(elements)
-  n = 0
-  const keysE = Object.keys(elements.entry)
-  const keysO = Object.keys(elements.output)
 
-
+  let element = getAllElements(molecules)
+  console.log(element, molecules)
+  let matrix = buildMatrix(molecules, leftcount)
+  matrix = gaussianElimination(matrix)
+  console.log(matrix)
+  let result = solve(matrix)
+  console.log("result: " , result)
+  console.log(result.includes(NaN))
+  if (result.includes(NaN) || result.includes(0)) {
+    document.getElementById("resultaat").innerText = "deze vergelijking werkt niet!"
+  }
+  else {
+    result = scaleToIntegers(result)
+    console.log("result: " + result)
+  }
+  if (result.includes(NaN) || result.includes(0)) {
+    document.getElementById("resultaat").innerText = "deze vergelijking werkt niet!"
+  }
+  else {
+    document.getElementById("resultaat").innerText = formatResults(result, vals)
+    console.log(formatResults(result, vals)) 
+  }
   
-  if (keysE.length !== keysO.length) {
-    document.getElementById("resultaat").innerText = "there are elements on one side and not on the other side";
+  function getAllElements(molecules) {
+    let set = new Set();
 
-  }
-  console.log(keysE)
-  for (let i = 0; i - 1 < keysE.length; i++) {
-    let e = checkEntry(keysE[i]);
-    if (e) {
-      document.getElementById("resultaat").innerText = e; break;
-    }
-  }
-
-  document.getElementById("resultaat").innerText = JSON.stringify(elements);
-
-  function checkEntry (key) {
-    console.log("checkEntry key:", key);
-    console.log("elements:", elements);
-    let n = 1;
-    let val = undefined;
-    let notWork = 1;
-  
-    const left = elements.entry[key] || 0;
-    const right = elements.output[key] || 0;
-    let dif = left - right;
-    
-    if (dif === 0) {
-      return
-    }
-    if (dif > 0) {        
-      while (notWork < 10) {
-        for (let i = 0; i < 3; i++) {
-          val = "val" + (n + 3);
-          if (!elements[val]) {continue};
-          if (key in elements[val]) {
-            if (left / (elements.output[key] * notWork) % 1 == 0) {
-              elements[val][key + "amount"] = left / (elements[val][key] * notWork);
-              let valKeys = Object.keys(elements[val])
-              valKeys = valKeys.filter(k => k !== key)
-              elements.output[key] = elements.output[key] * elements[val][key + "amount"]
-              return;
-            }
-            else {n++; continue;}
-          }      
-        }  
-        n = 1;
-        notWork++;
+    for (let mol of molecules) {
+      for (let el in mol) {
+        set.add(el);
       }
-    } 
-    else { console.log(elements, dif)
-      while (notWork < 10) {
-        for (let i = 0; i < 3; i++) {
-          val = "val" + n;
-
-          if (key in elements[val]) {
-            if (right / (elements[val][key] * notWork) % 1 == 0) {
-              elements[val][key + "amoumt"] = right / (elements[val][key] * notWork);
-              let valKeys = Object.keys(elements[val])
-              valKeys = valKeys.filter(k => k !== key)
-              elements.output[key] = elements.output[key] * elements[val][key + "amount"] 
-              return;
-            }
-            else {n++; continue;}
-          }      
-        }  
-        n = 1;
-        notWork++;
-      }
-      return "Not possible"
     }
+
+    return [...set];
+  }
+
+  function buildMatrix(molecules, leftCount) {
+    const elements_2 = getAllElements(molecules);
+    let matrix = [];
+
+    for (let el of elements_2) {
+      let row = [];
+
+      for (let i = 0; i < molecules.length; i++) {
+        let value = molecules[i][el] || 0;
+
+        if (i >= leftCount) value *= -1;
+
+        row.push(value);
+      }
+
+      matrix.push(row);
+    }
+
+    return matrix;
   }
 
 });
@@ -199,3 +172,88 @@ function checkNumber (i, state) {
   else {let out = i < 4 ? "entry" : "output"; return out}
 }
 
+function gaussianElimination(matrix) {
+  let m = matrix.length;
+  let n = matrix[0].length;
+
+  for (let i = 0; i < m; i++) {
+
+    let pivot = matrix[i][i];
+    if (pivot === 0) { 
+      for (let k = i + 1; k < m; k++) {
+        if (matrix[k][i] !== 0) {
+          [matrix[i], matrix[k]] = [matrix[k], matrix[i]];
+          pivot = matrix[i][i];
+          break;
+       }
+      }
+    };
+    for (let j = i; j < n; j++) {
+      matrix[i][j] /= pivot;
+    }
+
+    for (let k = i + 1; k < m; k++) {
+      let factor = matrix[k][i];
+
+      for (let j = i; j < n; j++) {
+        matrix[k][j] -= factor * matrix[i][j];
+      }
+    }
+  }
+
+  return matrix;
+}
+
+function solve(matrix) {
+  let rows = matrix.length;
+  let cols = matrix[0].length;
+
+  let result = new Array(cols).fill(0);
+
+  result[cols - 1] = 1;
+
+  for (let i = rows - 1; i >= 0; i--) {
+    let sum = 0;
+
+    for (let j = i + 1; j < cols; j++) {
+      sum += matrix[i][j] * result[j];
+    }
+
+
+    if (matrix[i][i] === 0) {
+      result[i] = 1;
+    } else {
+      result[i] = -sum / matrix[i][i];
+    }
+
+  }
+
+  return result;
+}
+function scaleToIntegers(arr) {
+  let factor = 1;
+  console.log("scaleToIntegers")
+  while (!arr.every(x => Number.isInteger(Number((x * factor).toFixed(6))))) {
+    factor++;
+  }
+
+  return arr.map(x => Number((x * factor).toFixed(6)));
+}
+function formatResults(thing, vals) {
+  let result = "";
+  let amount = 0;
+  for (let i = 1; i < 7; i++) {
+    if (vals["val" + i] !== "") {
+      result = result + thing[amount] + vals["val" + i]
+      amount++
+      if (i !== 3 && i !== 6 && vals["val" + (i + 1)] !== "") {
+        result = result +  " + "
+      }
+    }
+    if (i === 3) {
+      result = result + " -> "
+    }
+  }
+
+  return result;
+}

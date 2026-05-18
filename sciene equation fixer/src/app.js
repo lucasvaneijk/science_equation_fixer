@@ -1,5 +1,4 @@
-﻿console.log("works");
-const elementsList = ["H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge", "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg", "Pb", "Bi", "Po", "At", "Rn", "Fr", "Ra", "Ac", "Th", "Pa", "U", "Np", "Pu", "Am", "Cm", "Bk", "Cf", "Es", "Fm", "Md", "No", "Lr", "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Ds", "Rg", "Cn", "Nh", "Fl", "Mc", "Lv", "Ts", "Og"]
+﻿const elementsList = ["H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge", "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg", "Pb", "Bi", "Po", "At", "Rn", "Fr", "Ra", "Ac", "Th", "Pa", "U", "Np", "Pu", "Am", "Cm", "Bk", "Cf", "Es", "Fm", "Md", "No", "Lr", "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Ds", "Rg", "Cn", "Nh", "Fl", "Mc", "Lv", "Ts", "Og"]
 const elementsListOneCaracter = ["H", "B", "C", "N", "O", "F", "P", "S", "K", "V", "Y", "I", "U", "W"]
 document.getElementById("send").addEventListener("click", () => {
 
@@ -95,26 +94,20 @@ document.getElementById("send").addEventListener("click", () => {
   }
 
   let element = getAllElements(molecules)
-  console.log(element, molecules)
   let matrix = buildMatrix(molecules, leftcount)
   matrix = gaussianElimination(matrix)
-  console.log(matrix)
   let result = solve(matrix)
-  console.log("result: " , result)
-  console.log(result.includes(NaN))
   if (result.includes(NaN) || result.includes(0)) {
     document.getElementById("resultaat").innerText = "deze vergelijking werkt niet!"
   }
   else {
     result = scaleToIntegers(result)
-    console.log("result: " + result)
   }
   if (result.includes(NaN) || result.includes(0)) {
     document.getElementById("resultaat").innerText = "deze vergelijking werkt niet!"
   }
   else {
     document.getElementById("resultaat").innerText = formatResults(result, vals)
-    console.log(formatResults(result, vals)) 
   }
   
   function getAllElements(molecules) {
@@ -232,7 +225,6 @@ function solve(matrix) {
 }
 function scaleToIntegers(arr) {
   let factor = 1;
-  console.log("scaleToIntegers")
   while (!arr.every(x => Number.isInteger(Number((x * factor).toFixed(6))))) {
     factor++;
   }

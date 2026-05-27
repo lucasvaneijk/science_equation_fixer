@@ -24,6 +24,8 @@ It is a program to make science equations possible and not break the law of loss
 2. open the .exe by double tapping it
 3. to use it follow the steps 2, 3 and 4 of the webversion
 
+**tip:** to really finish the app find the .exe in the explorer and drag it onto the taskbar 
+
 
 ## features
 - easy ui and intuitive controls

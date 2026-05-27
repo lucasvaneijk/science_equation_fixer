@@ -39,11 +39,13 @@ to change the code or run experiments you would have to run it without the .exe
 cd directory
 ```
 to get to the map where your project is located
+
 4. run
 ```bash
 npm install
 ```
 to set up your program
+
 5. to run the program use
 ```bash
 npm run dev

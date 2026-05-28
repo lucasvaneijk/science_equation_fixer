@@ -15,7 +15,7 @@ It is a program to make science equations possible and not break the law of loss
 # usage 
 **web version**
 1. open the website: <a href="https://scienceequationfixer.netlify.app" target="_blank">scienceequationfixer.netlify.app</a>
-2. enter your elements
+2. enter your elements (make sure to use capitals on the first letter of an element)
 3. press on send
 4. under the send key is your result
 
